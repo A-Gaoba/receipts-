@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Payment Receipt</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+      }
+      .receipt-container {
+        width: 650px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border: 1px solid #dcdcdc;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .header img {
+        width: 130px;
+        filter: hue-rotate(0deg) saturate(100%) brightness(100%) sepia(100%)
+          hue-rotate(-50deg);
+      }
+      .header img.logo {
+        width: 130px;
+        filter: brightness(0) saturate(100%) invert(16%) sepia(95%)
+          saturate(6214%) hue-rotate(-2deg) brightness(94%) contrast(119%);
+      }
+      .header h1 {
+        margin: 5px 0 8px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #e41313;
+      }
+      .header p {
+        margin: 3px 0;
+        font-size: 14px;
+        color: #666;
+      }
+      .details {
+        margin-bottom: 25px;
+      }
+      .details h3 {
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #e41313;
+        border-bottom: 2px solid #e41313;
+        padding-bottom: 5px;
+      }
+      .details p {
+        margin: 10px 0;
+        font-size: 15px;
+        color: #333;
+      }
+      .details p strong {
+        color: #555;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 14px;
+        color: #888;
+      }
+      .btn-print {
+        display: inline-block;
+        padding: 10px 30px;
+        background-color: #e41313;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      .btn-print:hover {
+        background-color: #d41212;
+      }
+      .input-section {
+        width: 650px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #dcdcdc;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      }
+      .input-section label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+      }
+      .input-section input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .input-section button {
+        padding: 10px 30px;
+        background-color: #e41313;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .input-section button:hover {
+        background-color: #d41212;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="input-section" id="inputSection">
+      <label for="name">Customer Name</label>
+      <input type="text" id="name" placeholder="Enter customer name" />
+
+      <label for="phone">Customer Phone</label>
+      <input type="text" id="phone" placeholder="Enter customer phone" />
+
+      <label for="service">Service</label>
+      <input type="text" id="service" placeholder="Enter service description" />
+
+      <label for="amount">Amount Paid</label>
+      <input type="text" id="amount" placeholder="Enter amount paid" />
+
+      <label for="date">Payment Date</label>
+      <input type="date" id="date" />
+
+      <label for="method">Payment Method</label>
+      <input type="text" id="method" placeholder="Enter payment method" />
+
+      <button onclick="updateReceipt()">Update Receipt</button>
+    </div>
+
+    <div class="receipt-container hidden" id="receiptContainer">
+      <div class="header">
+        <img src="/logo.png" alt="Company Logo" class="logo" />
+        <h1>Sharaft Company</h1>
+        <p>Address: Miklukho-Maklaya Street, 6, Moscow, Russia</p>
+        <p>Phone: +7 926 103-81-52 | Email: info@sharaft.com</p>
+      </div>
+
+      <div class="details">
+        <h3>Customer Details</h3>
+        <p>
+          <strong>Name:</strong> <span id="customerName">[Customer Name]</span>
+        </p>
+        <p>
+          <strong>Phone:</strong>
+          <span id="customerPhone">[Customer Phone]</span>
+        </p>
+
+        <h3>Payment Details</h3>
+        <p>
+          <strong>Service:</strong> <span id="customerService">[Service]</span>
+        </p>
+        <p>
+          <strong>Amount Paid:</strong>
+          <span id="customerAmount">[Amount]</span>
+        </p>
+        <p><strong>Date:</strong> <span id="customerDate">[Date]</span></p>
+        <p>
+          <strong>Payment Method:</strong>
+          <span id="customerMethod">[Payment Method]</span>
+        </p>
+      </div>
+
+      <div class="footer">
+        <p>Thank you for choosing Sharaft Company!</p>
+        <p>We look forward to serving you again.</p>
+      </div>
+    </div>
+
+    <button class="btn-print hidden" id="printButton" onclick="window.print()">
+      Print
+    </button>
+
+    <script>
+      function updateReceipt() {
+        document.getElementById("customerName").textContent =
+          document.getElementById("name").value;
+        document.getElementById("customerPhone").textContent =
+          document.getElementById("phone").value;
+        document.getElementById("customerService").textContent =
+          document.getElementById("service").value;
+        document.getElementById("customerAmount").textContent =
+          document.getElementById("amount").value;
+        document.getElementById("customerDate").textContent =
+          document.getElementById("date").value;
+        document.getElementById("customerMethod").textContent =
+          document.getElementById("method").value;
+
+        document.getElementById("inputSection").classList.add("hidden");
+        document.getElementById("receiptContainer").classList.remove("hidden");
+        document.getElementById("printButton").classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
